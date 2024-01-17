@@ -24,3 +24,7 @@ class Birds(Resource):
         return make_response(jsonify(birds), 200)
     
 api.add_resource(Birds, '/birds')
+
+@app.route('/')
+def index():
+    return 'Bird App'
