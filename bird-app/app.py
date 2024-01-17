@@ -18,12 +18,13 @@ migrate = Migrate(app, db)
 api = Api(app)
 
 class Birds(Resource):
-
     def get(self):
-        birds = [bird.to_dict() for bird in Bird.query.all()]
-        return make_response(jsonify(birds), 200)
-    
-api.add_resource(Birds, '/birds')
+        try:
+            birds = [bird.to_dict() for bird in Bird.query.all()]
+            return make_response(jsonify(birds), 200)
+        except Exception as e:
+            return make_response(jsonify({'error': str(e)}), 500)
+
 
 class BirdByID(Resource):
     def get(self, id):
