@@ -25,6 +25,13 @@ class Birds(Resource):
     
 api.add_resource(Birds, '/birds')
 
+class BirdByID(Resource):
+    def get(self, id):
+        bird = Bird.query.filter_by(id=id).first().to_dict()
+        return make_response(jsonify(bird), 200)
+
+api.add_resource(BirdByID, '/birds/<int:id>')
+
 @app.route('/')
 def index():
     return 'Bird App'
