@@ -17,23 +17,22 @@ migrate = Migrate(app, db)
 
 api = Api(app)
 
-class Birds(Resource):
-    def get(self):
-        try:
-            birds = [bird.to_dict() for bird in Bird.query.all()]
-            return make_response(jsonify(birds), 200)
-        except Exception as e:
-            return make_response(jsonify({'error': str(e)}), 500)
+@app.route('/birds', methods=['GET'])
+def get_birds():
+    try:
+        birds = [bird.to_dict() for bird in Bird.query.all()]
+        return make_response(jsonify(birds), 200)
+    except Exception as e:
+        return make_response(jsonify({'error': str(e)}), 500)
 
+@app.route('/birds/<int:id>', methods=['GET'])
+def get_bird_by_id(id):
+    bird = Bird.query.filter_by(id=id).first()
 
-class BirdByID(Resource):
-    def get(self, id):
-        bird = Bird.query.filter_by(id=id).first()
-
-        if bird:
-            return make_response(jsonify(bird.to_dict()), 200)
-        else:
-            return make_response(jsonify({'error': 'Bird not found'}), 404)
+    if bird:
+        return make_response(jsonify(bird.to_dict()), 200)
+    else:
+        return make_response(jsonify({'error': 'Bird not found'}), 404)
 
 
 @app.route('/')
